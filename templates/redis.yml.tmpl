@@ -1,0 +1,51 @@
+director_uuid: {{director_uuid}}
+name: {{instance_id}}
+
+releases:
+- name: redis
+  version: {{.version}}
+
+stemcells:
+- alias: trusty
+  os: ubuntu-trusty
+  version: latest
+
+instance_groups:
+- instances: 1
+  name: redis_leader
+  vm_type: medium
+  stemcell: trusty
+  azs: [z1]
+  networks:
+  - name: default
+  persistent_disk_type: large
+  jobs:
+  - name: redis
+    release: redis
+    properties:
+      redis:
+        password: {{.password}}
+{{if gt .instances 1}}
+- instances: {{.instances - 1}} 
+  name: redis_leader_z1
+  vm_type: medium
+  stemcell: trusty
+  azs: [z1]
+  networks:
+  - name: default
+  persistent_disk_type: large
+  jobs:
+  - name: redis
+    release: redis
+    properties:
+      redis:
+        master: 
+        password: {{.password}}
+{{end}}
+update:
+  canaries: 1
+  max_in_flight: 1
+  serial: false
+  canary_watch_time: 1000-60000
+  update_watch_time: 1000-60000
+

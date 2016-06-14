@@ -1,0 +1,6 @@
+#!bash -e
+
+host=bosh vms | grep '{{.instance_id}}' | awk '{print $11}'
+
+echo "{'host': \"$host\", 'password': '{{.password}}', 'port': 58301 }"
+exit 0

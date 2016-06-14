@@ -1,0 +1,22 @@
+broker_id: 'bosh'
+bosh_target: '52.9.99.22'
+bosh_user: 'admin'
+bosh_password: 'admin'
+service_user: 'user'
+service_password: 'password'
+plans:
+  - plan_id:  redis
+    name:  redis
+    description: "Redis database"
+    release: 'https://bosh.io/d/github.com/cloudfoundry-community/redis-boshrelease?v={{.version}}'
+    stemcell: "https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent"
+    manifest_template: 'redis.yml'
+    bind_script: 'redis.sh'
+    params:
+      - name: 'version'
+        default: '3232.6'
+      - name: 'instances'
+        default: 1
+      - name: 'password'
+        random: true
+
