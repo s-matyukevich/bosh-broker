@@ -26,7 +26,7 @@ instance_groups:
       redis:
         password: {{.password}}
 {{if gt .instances 1}}
-- instances: {{.instances - 1}} 
+- instances: {{.instances}} 
   name: redis_leader_z1
   vm_type: medium
   stemcell: trusty

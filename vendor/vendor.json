@@ -1,0 +1,79 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "iIUYZyoanCQQTUaWsu8b+iOSPt4=",
+			"path": "github.com/gorilla/context",
+			"revision": "1c83b3eabd45b6d76072b66b746c20815fb2872d",
+			"revisionTime": "2015-08-20T05:12:45Z"
+		},
+		{
+			"checksumSHA1": "SFyZRbcgdCFpvOrPYNv3UJ3rO4Q=",
+			"path": "github.com/gorilla/mux",
+			"revision": "9c068cf16d982f8bd444b8c352acbeec34c4fe5b",
+			"revisionTime": "2015-11-11T10:35:30Z"
+		},
+		{
+			"checksumSHA1": "gcLub3oB+u4QrOJZcYmk/y2AP4k=",
+			"path": "github.com/nu7hatch/gouuid",
+			"revision": "179d4d0c4d8d407a32af483c2354df1d2c91e6c3",
+			"revisionTime": "2013-12-21T20:05:32Z"
+		},
+		{
+			"checksumSHA1": "d98kh520t2v64tFN/N6nm1Ohv2s=",
+			"path": "github.com/pivotal-cf/brokerapi",
+			"revision": "1a60b0cfd400917401a94de80f51b48a3caaa254",
+			"revisionTime": "2016-06-08T10:34:26Z"
+		},
+		{
+			"checksumSHA1": "4yHEcDRxN5sqr5UDFs3qr0B4lwA=",
+			"path": "github.com/pivotal-cf/brokerapi/auth",
+			"revision": "1a60b0cfd400917401a94de80f51b48a3caaa254",
+			"revisionTime": "2016-06-08T10:34:26Z"
+		},
+		{
+			"checksumSHA1": "EkVV1/3mZa7cpH3wSrgfi7vf2hQ=",
+			"path": "github.com/pivotal-golang/lager",
+			"revision": "95b2ada4cdf781bdcf07e5207879e034ac8c5314",
+			"revisionTime": "2015-10-29T20:40:11Z"
+		},
+		{
+			"checksumSHA1": "gaEmTQHn84O8Rk8VoUuL5A+pEhk=",
+			"path": "github.com/s-matyukevich/bosh-broker",
+			"revision": "34a2ee849308b32470233990a655e5930bc9bff0",
+			"revisionTime": "2016-06-14T15:13:05Z"
+		},
+		{
+			"checksumSHA1": "OslckuYDBlSTRLOTLrIZYR8brPs=",
+			"path": "github.com/s-matyukevich/bosh-broker/source/bosh",
+			"revision": "34a2ee849308b32470233990a655e5930bc9bff0",
+			"revisionTime": "2016-06-14T15:13:05Z"
+		},
+		{
+			"checksumSHA1": "YPTajcqjjQ7WBO8nf4JetDeGxls=",
+			"path": "github.com/s-matyukevich/bosh-broker/source/broker",
+			"revision": "34a2ee849308b32470233990a655e5930bc9bff0",
+			"revisionTime": "2016-06-14T15:13:05Z"
+		},
+		{
+			"checksumSHA1": "PWlmQFbiTq/zHA+a7DqGDfDSJXI=",
+			"path": "github.com/s-matyukevich/bosh-broker/source/config",
+			"revision": "34a2ee849308b32470233990a655e5930bc9bff0",
+			"revisionTime": "2016-06-14T15:13:05Z"
+		},
+		{
+			"checksumSHA1": "OJ91oC1brR0eW4PR8yojtBbNpNs=",
+			"path": "github.com/s-matyukevich/bosh-broker/source/tmpl",
+			"revision": "34a2ee849308b32470233990a655e5930bc9bff0",
+			"revisionTime": "2016-06-14T15:13:05Z"
+		},
+		{
+			"checksumSHA1": "KgT+peLCcuh0/m2mpoOZXuxXmwc=",
+			"path": "gopkg.in/yaml.v2",
+			"revision": "7ad95dd0798a40da1ccdff6dff35fd177b5edf40",
+			"revisionTime": "2015-06-24T10:29:02Z"
+		}
+	],
+	"rootPath": "github.com/s-matyukevich/bosh-broker"
+}
