@@ -3,8 +3,10 @@ package broker
 import (
 	"encoding/json"
 	"fmt"
-	"os"
+	"io/ioutil"
+	//"os"
 	"os/exec"
+	"path/filepath"
 
 	"github.com/nu7hatch/gouuid"
 	"github.com/pivotal-cf/brokerapi"
@@ -19,22 +21,22 @@ func NewHandler(config *config.Config) (Handler, error) {
 	h.config = config
 	h.templates = make(map[string]*Templates, 0)
 	h.instances = make(map[string]*ServiceInstance, 0)
-	h.bosh = &bosh.BoshProxy{}
-	err := h.bosh.Init(config.BoshTarget, config.BoshUser, config.BoshPassword)
+	var err error
+	h.bosh, h.boshUUID, err = bosh.NewBoshProxy(config.BoshTarget, config.BoshUser, config.BoshPassword)
 	if err != nil {
 		return h, err
 	}
 	for key, p := range config.Plans {
 		t := &Templates{}
-		t.ManifestTmpl, err = tmpl.NewTemplate(p.ManifestTemplate)
+		t.ManifestTmpl, err = prepareTemplate(p.ManifestTemplate)
 		if err != nil {
 			return h, err
 		}
-		t.BindTmpl, err = tmpl.NewTemplate(p.BindTemplate)
+		t.BindTmpl, err = prepareTemplate(p.BindTemplate)
 		if err != nil {
 			return h, err
 		}
-		t.UnbindTmpl, err = tmpl.NewTemplate(p.UnbindTemplate)
+		t.UnbindTmpl, err = prepareTemplate(p.UnbindTemplate)
 		if err != nil {
 			return h, err
 		}
@@ -49,6 +51,17 @@ func NewHandler(config *config.Config) (Handler, error) {
 		h.templates[key] = t
 	}
 	return h, nil
+}
+
+func prepareTemplate(path string) (*tmpl.Template, error) {
+	if path == "" {
+		return nil, nil
+	}
+	str, err := ioutil.ReadFile(filepath.Join("templates", path))
+	if err != nil {
+		return nil, err
+	}
+	return tmpl.NewTemplate(string(str))
 }
 
 type Handler struct {
@@ -102,12 +115,12 @@ func (h Handler) Provision(instanceID string, details brokerapi.ProvisionDetails
 }
 
 func (h Handler) Deprovision(instanceID string, _ brokerapi.DeprovisionDetails, _ bool) (brokerapi.IsAsync, error) {
-	deploymentPath := fmt.Sprintf("deployments/%s/", instanceID)
-	err := os.RemoveAll(deploymentPath)
+	//deploymentPath := fmt.Sprintf("deployments/%s/", instanceID)
+	/*err := os.RemoveAll(deploymentPath)
 	if err != nil {
 		return true, err
-	}
-	err = h.bosh.DeleteDeployment(instanceID)
+	}*/
+	err := h.bosh.DeleteDeployment("deployment" + instanceID)
 	return true, err
 }
 
@@ -115,7 +128,7 @@ func (h Handler) Bind(instanceID, bindingID string, details brokerapi.BindDetail
 	service := h.instances[instanceID]
 	b := brokerapi.Binding{}
 	bindPath := fmt.Sprintf("deployments/%s/%s_bind.sh", instanceID, bindingID)
-	err := service.Templates.BindTmpl.ExecuteAndSave(service.InstanceParams, bindPath, 700)
+	err := service.Templates.BindTmpl.ExecuteAndSave(service.InstanceParams, bindPath, 0770)
 	if err != nil {
 		return b, err
 	}
@@ -177,7 +190,7 @@ func (h Handler) doDeployment(instanceID string, s *ServiceInstance) (string, er
 		return "", err
 	}
 	deploymentPath := fmt.Sprintf("deployments/%s/manifest.yml", instanceID)
-	err = s.Templates.ManifestTmpl.ExecuteAndSave(s.InstanceParams, deploymentPath, 600)
+	err = s.Templates.ManifestTmpl.ExecuteAndSave(s.InstanceParams, deploymentPath, 0660)
 	if err != nil {
 		return "", err
 	}
@@ -217,6 +230,7 @@ func (h Handler) prepareParams(instanceID string, params map[string]interface{},
 			return fmt.Errorf("Required parameter %s is not set", p.Name)
 		}
 	}
+	params["deployment_name"] = "deployment" + instanceID
 	params["instance_id"] = instanceID
 	params["director_uuid"] = h.boshUUID
 	return nil

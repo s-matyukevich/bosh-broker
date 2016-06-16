@@ -10,13 +10,13 @@ plans:
     description: "Redis database"
     release: 'https://bosh.io/d/github.com/cloudfoundry-community/redis-boshrelease?v={{.version}}'
     stemcell: "https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent"
-    manifest_template: 'redis.yml'
-    bind_template: 'redis.sh'
+    manifest_template: 'redis.yml.tmpl'
+    bind_template: 'redis-bind.sh.tmpl'
     params:
       - name: 'version'
-        default: '3232.6'
-      - name: 'instances'
-        default: 1
+        default: '12'
+      - name: 'slave_instances'
+        default: 0
       - name: 'password'
         random: true
 

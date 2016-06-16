@@ -1,5 +1,5 @@
-director_uuid: {{director_uuid}}
-name: {{instance_id}}
+director_uuid: {{.director_uuid}}
+name: {{.deployment_name}}
 
 releases:
 - name: redis
@@ -25,9 +25,9 @@ instance_groups:
     properties:
       redis:
         password: {{.password}}
-{{if gt .instances 1}}
-- instances: {{.instances}} 
-  name: redis_leader_z1
+{{if gt .slave_instances 0}}
+- instances: {{.slave_instances}} 
+  name: redis_slave
   vm_type: medium
   stemcell: trusty
   azs: [z1]

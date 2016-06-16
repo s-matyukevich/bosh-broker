@@ -39,34 +39,34 @@
 			"revisionTime": "2015-10-29T20:40:11Z"
 		},
 		{
-			"checksumSHA1": "gaEmTQHn84O8Rk8VoUuL5A+pEhk=",
+			"checksumSHA1": "3nfpzvcQ0GQSK3Zp8Q9jK8nElLY=",
 			"path": "github.com/s-matyukevich/bosh-broker",
-			"revision": "34a2ee849308b32470233990a655e5930bc9bff0",
-			"revisionTime": "2016-06-14T15:13:05Z"
+			"revision": "cddcc79db12ff725239c0159a6c304921d7285d2",
+			"revisionTime": "2016-06-15T14:56:51Z"
 		},
 		{
-			"checksumSHA1": "OslckuYDBlSTRLOTLrIZYR8brPs=",
+			"checksumSHA1": "RGJC+gyu/bDyIeJL032/jw7gwPI=",
 			"path": "github.com/s-matyukevich/bosh-broker/source/bosh",
-			"revision": "34a2ee849308b32470233990a655e5930bc9bff0",
-			"revisionTime": "2016-06-14T15:13:05Z"
+			"revision": "cddcc79db12ff725239c0159a6c304921d7285d2",
+			"revisionTime": "2016-06-15T14:56:51Z"
 		},
 		{
-			"checksumSHA1": "YPTajcqjjQ7WBO8nf4JetDeGxls=",
+			"checksumSHA1": "l32K+VUFZMw7OR6gkB7xbOYi+Ow=",
 			"path": "github.com/s-matyukevich/bosh-broker/source/broker",
-			"revision": "34a2ee849308b32470233990a655e5930bc9bff0",
-			"revisionTime": "2016-06-14T15:13:05Z"
+			"revision": "cddcc79db12ff725239c0159a6c304921d7285d2",
+			"revisionTime": "2016-06-15T14:56:51Z"
 		},
 		{
 			"checksumSHA1": "PWlmQFbiTq/zHA+a7DqGDfDSJXI=",
 			"path": "github.com/s-matyukevich/bosh-broker/source/config",
-			"revision": "34a2ee849308b32470233990a655e5930bc9bff0",
-			"revisionTime": "2016-06-14T15:13:05Z"
+			"revision": "cddcc79db12ff725239c0159a6c304921d7285d2",
+			"revisionTime": "2016-06-15T14:56:51Z"
 		},
 		{
 			"checksumSHA1": "OJ91oC1brR0eW4PR8yojtBbNpNs=",
 			"path": "github.com/s-matyukevich/bosh-broker/source/tmpl",
-			"revision": "34a2ee849308b32470233990a655e5930bc9bff0",
-			"revisionTime": "2016-06-14T15:13:05Z"
+			"revision": "cddcc79db12ff725239c0159a6c304921d7285d2",
+			"revisionTime": "2016-06-15T14:56:51Z"
 		},
 		{
 			"checksumSHA1": "KgT+peLCcuh0/m2mpoOZXuxXmwc=",
