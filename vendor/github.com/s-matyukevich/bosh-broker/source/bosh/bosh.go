@@ -81,11 +81,19 @@ func (b *BoshProxy) Status(task string) (string, error) {
 	res := strings.Split(l, " ")
 	return res[2], nil
 }
-func (b *BoshProxy) DeleteDeployment(name string) error {
-	cmd := exec.Command("bosh", "--no-color", "-u", b.user, "-p", b.password, "-n", "delete deployment", name)
+func (b *BoshProxy) DeleteDeployment(name string) (string, error) {
+	cmd := exec.Command("bosh", "--no-color", "-u", b.user, "-p", b.password, "-n", "-N", "delete", "deployment", name)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return boshError{cmd.Path, cmd.Args, err, out}
+		return "", boshError{cmd.Path, cmd.Args, err, out}
 	}
-	return nil
+	lines := strings.Split(string(out), "\n")
+	var l string
+	for _, l = range lines {
+		if strings.Contains(l, "Task") {
+			break
+		}
+	}
+	res := strings.Split(l, " ")
+	return res[1], nil
 }

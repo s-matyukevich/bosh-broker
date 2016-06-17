@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	//"os"
+	"os"
 	"os/exec"
 	"path/filepath"
 
@@ -115,12 +115,13 @@ func (h Handler) Provision(instanceID string, details brokerapi.ProvisionDetails
 }
 
 func (h Handler) Deprovision(instanceID string, _ brokerapi.DeprovisionDetails, _ bool) (brokerapi.IsAsync, error) {
-	//deploymentPath := fmt.Sprintf("deployments/%s/", instanceID)
-	/*err := os.RemoveAll(deploymentPath)
+	deploymentPath := fmt.Sprintf("deployments/%s/", instanceID)
+	err := os.RemoveAll(deploymentPath)
 	if err != nil {
 		return true, err
-	}*/
-	err := h.bosh.DeleteDeployment("deployment" + instanceID)
+	}
+	service := h.instances[instanceID]
+	service.LastTaskId, err = h.bosh.DeleteDeployment("deployment" + instanceID)
 	return true, err
 }
 
@@ -128,7 +129,7 @@ func (h Handler) Bind(instanceID, bindingID string, details brokerapi.BindDetail
 	service := h.instances[instanceID]
 	b := brokerapi.Binding{}
 	bindPath := fmt.Sprintf("deployments/%s/%s_bind.sh", instanceID, bindingID)
-	err := service.Templates.BindTmpl.ExecuteAndSave(service.InstanceParams, bindPath, 0770)
+	err := service.Templates.BindTmpl.ExecuteAndSave(service.InstanceParams, bindPath, 0777)
 	if err != nil {
 		return b, err
 	}
@@ -146,7 +147,7 @@ func (h Handler) Unbind(instanceID, bindingID string, _ brokerapi.UnbindDetails)
 	service := h.instances[instanceID]
 	if service.Templates.UnbindTmpl != nil {
 		unbindPath := fmt.Sprintf("deployments/%s/%s_unbind.sh", instanceID, bindingID)
-		err := service.Templates.UnbindTmpl.ExecuteAndSave(service.InstanceParams, unbindPath, 700)
+		err := service.Templates.UnbindTmpl.ExecuteAndSave(service.InstanceParams, unbindPath, 0777)
 		if err != nil {
 			return err
 		}
@@ -233,5 +234,7 @@ func (h Handler) prepareParams(instanceID string, params map[string]interface{},
 	params["deployment_name"] = "deployment" + instanceID
 	params["instance_id"] = instanceID
 	params["director_uuid"] = h.boshUUID
+	params["bosh_user"] = h.config.BoshUser
+	params["bosh_password"] = h.config.BoshPassword
 	return nil
 }

@@ -1,6 +1,6 @@
-#!bash -e
+#!/bin/bash -e
 
-host=$(bosh -d  {{.deployment_name}} vms | grep 'redis_leader' | awk '{print $8}')
+host=$(bosh -u '{{.bosh_user}}' -p '{{.bosh_password}}'  -d  {{.deployment_name}} vms | grep 'redis_leader' | awk '{print $11}')
 
-echo "{'host': \"$host\", 'password': '{{.password}}', 'port': 58301 }"
+echo "{\"host\": \"$host\", \"password\": \"{{.password}}\", \"port\": 58301 }"
 exit 0
