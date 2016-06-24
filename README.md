@@ -65,8 +65,8 @@ plans:
 The following properties must be defined in a configuration file:
 
 | Property Name | Description |
-| -- | -- |
-| broker_id | Broker Id (Must be unique per Cloud Foundry deployment). This Id is passed to Cloud Foundry in response of executing `/v2/catalog` method. See (Service broker API)[https://docs.cloudfoundry.org/services/api.html#catalog-mgmt] for details.  |
+| --- | --- |
+| broker_id | Broker Id (Must be unique per Cloud Foundry deployment). This Id is passed to Cloud Foundry in response of executing `/v2/catalog` method. See (Service broker API)[https://docs.cloudfoundry.org/services/api.html#catalog-mgmt] for details. |
 | bosh_targer | IP address or host mane fo BOSH director |
 | bosh_user | Username that broker uses to log in to BOSH |
 | bosh_password | Password that BOSH uses to log in to BOSH |
@@ -79,7 +79,7 @@ The following properties must be defined in a configuration file:
 In configuration, each service plan is defined as a separate property of a plans object. The name of this property is used as plan unique id. Eah plan should contina the following properties.
 
 | Property Name | Description |
-| -- | -- |
+| --- | --- |
 | name | Name of a service plan |
 | description | Description of a service plan |
 | release | BOSH release url. This is actually a template, so things like {{.version}} can be used here |
@@ -94,7 +94,7 @@ In configuration, each service plan is defined as a separate property of a plans
 Each parameter, that can be passed to service broker at provision time, should be added to params collection. The following properties can be specified for each parameter.
 
 | Property Name | Description |
-| -- | -- |
+| --- | --- |
 | name | Parameter name. This specifies how parameters is specifed in `cf create-service` command. With exactly the same name this parameter will be exposed to all templates |
 | default | Default value for a parameter. |
 | random | Specifies, whether broker should generate random string for a parameter value, in case if this value is not specified by the user. |
@@ -104,30 +104,30 @@ Each parameter, that can be passed to service broker at provision time, should b
 The following steps should be made in order to deploy bosh service broker.
 
 1. Clone service broker repository
-```
-git clone https://github.com/s-matyukevich/bosh-broker
-cd bosh_broker
-```
+  ```
+  git clone https://github.com/s-matyukevich/bosh-broker
+  cd bosh_broker
+  ```
 
 1. Modify `config.yml` file and add all necessary templates to `templates` folder.
 
 1. Push service broker to cloud foundry as an application (For now this is the only avaliable option. Later sepparate BOSH release will be provided to deploy this broker to BOSH directly.)
-```
-cf push bosh-broker
-```
+  ```
+  cf push bosh-broker
+  ```
 
 1. Add service broker to Cloud Foundry
-```
-cf create-service-broker bosh <user> <password> <broker-url>
-```
+  ```
+  cf create-service-broker bosh <user> <password> <broker-url>
+  ```
 
 1. Create service instance
-```
-cf create-service <instance-name> bosh <plan-name> -c <plan-parameters>
-```
+  ```
+  cf create-service <instance-name> bosh <plan-name> -c <plan-parameters>
+  ```
 
 1. Bind service to an application
-```
-cf bind-service <app-name> <instance-name>
-```
+  ```
+  cf bind-service <app-name> <instance-name>
+  ```
  
