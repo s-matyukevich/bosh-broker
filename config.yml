@@ -1,5 +1,5 @@
 broker_id: 'bosh'
-bosh_target: '52.9.99.22'
+bosh_target: '52.52.19.198'
 bosh_user: 'admin'
 bosh_password: 'admin'
 service_user: 'user'

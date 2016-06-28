@@ -1,6 +1,6 @@
 azs:
 - name: z1
-  cloud_properties: {availability_zone: us-west-1b }
+  cloud_properties: {availability_zone: us-west-1c }
 
 vm_types:
 - name: micro
@@ -29,7 +29,7 @@ networks:
     az: z1
     dns: [10.0.0.2]
     reserved: [10.0.0.1 - 10.0.0.10]
-    cloud_properties: {subnet: subnet-d62c088f }
+    cloud_properties: {subnet: subnet-92d033f6 }
 - name: vip
   type: vip
 

@@ -113,17 +113,18 @@ The following steps should be made in order to deploy bosh service broker.
 
 1. Push service broker to cloud foundry as an application (For now this is the only avaliable option. Later sepparate BOSH release will be provided to deploy this broker to BOSH directly.)
   ```
-  cf push bosh-broker
+  cf push bosh-broker -b https://github.com/cloudfoundry/go-buildpack
   ```
 
 1. Add service broker to Cloud Foundry
   ```
   cf create-service-broker bosh <user> <password> <broker-url>
+  cf enable-service-access bosh
   ```
 
 1. Create service instance
   ```
-  cf create-service <instance-name> bosh <plan-name> -c <plan-parameters>
+  cf create-service  bosh <plan-name> <instance-name> -c <plan-parameters>
   ```
 
 1. Bind service to an application
