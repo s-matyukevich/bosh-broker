@@ -1,10 +1,10 @@
-## Universal bosh service broker
+## Universal BOSH Service Broker
 
-Universal bosh service broker can provide any software, that can be deployed by BOSH, as a service for Coud Foundry.
+The Universal BOSH Service Broker can provide any software, which can be deployed by BOSH, as a service for Coud Foundry.
 
 ### How it works
 
-When new service instance is creaded (this happens when Cloud Foundry operator executes `cf create-service` command) this broker uses BOSH to deploy new service. It actually executes `bosh deploy` command and specifies the deployment manifest, that is generated for this service instance. This manifest is generated from a template. For each service, that bosh service broker should be able to deploy, manifest template should be created and put into `templates` folder.Each template is actually an usual BOSH manifest, that uses [Go template syntax](https://golang.org/pkg/text/template/) to define some parameters, that will be initialized only at service provision time. For example:
+When a new service instance is created (this happens when a Cloud Foundry operator runs the `cf create-service` command), this broker uses BOSH to deploy the new service. It actually executes the `bosh deploy` command and specifies the deployment manifest, which is generated for this service instance. The manifest is generated from a template. For each service that the BOSH Service Broker should be able to deploy, a manifest template needs to be created and put into the `templates` folder. Each template is actually a regular BOSH manifest, which uses the [Go template syntax](https://golang.org/pkg/text/template/) to define some parameters that will be initialized only at service provision time. For example:
 
 ```
 instance_groups:
@@ -15,13 +15,13 @@ instance_groups:
   azs: [z1]
 ```
 
-This is only a part of manifest template, but it should clearly show the main idea. This template defines 3 parameters (`instances`, `vm_type` and `stemcell`) Those parameters are initialized at service provision time with concrete values:
+This is only a part of the manifest template, but it should illustrate the main idea. The template defines 3 parameters (`instances`, `vm_type`, and `stemcell`). At service provision time, those parameters are initialized with concrete values:
 
 ```
 cf create-service bosh redis -c '{instances: 2, vm_type: "medium", stemcell: "trusty"}'
 ```
 
-When service instance is bound to an application, special bash script is executed. This script should print to stdout a json object. This object should contain credentials that later are passed to the application in VCAP_SERVICES environment valuable. This script is also defined as a template and it is rendered using the same parameters, that were used for rendering manifest template. The following is an exaple of a bind script:
+When a service instance is bound to an application, a special bash script is executed. This script should print to stdout a JSON object. This object should contain credentials that later are passed to the application in the VCAP_SERVICES environment variable. The script is also defined as a template, rendered with the same parameters that were used for rendering the manifest template. The following is an exaple of a bind script:
 
 ```
 #!/bin/bash -e
@@ -32,11 +32,11 @@ echo "{\"host\": \"$host\", \"password\": \"{{.password}}\", \"port\": 58301 }"
 exit 0
 ```
 
-In this script we first obtain value for the ip address of a redis_leader vm. This is done using a combination of `bosh vms`, `grep` and `awk` commands (probably later we will provide a more readable way of doing such kind of things).  Then we just print to stdout json object with credentials, that are required to connect to redis host. You can also see that in this script template 4 configuration parameters are used (`bosh_user`, `bosh_password`, `deployment_name` and `password`) The first 3 of them are standart and can be used in all templates. `password` parameter is specific to redis service plan.
+In this script, we first obtain a value for the IP address of a `redis_leader` VM. This is done using a combination of `bosh vms`, `grep`, and `awk` commands (later, we may provide a more readable way of doing such kind of things). Then, we just print to stdout a JSON object with credentials required to connect to the Redis host. You can also see that there are 4 configuration parameters in this script template: `bosh_user`, `bosh_password`, `deployment_name`, and `password`. The first 3 of them are standard and can be employed in all templates. The `password` parameter is specific to the Redis service plan.
 
 ### Broker configuration
 
-Before using, bosh service broker must be configured with list of all service plan, that broker should deploy. The following is an example of a configuration file for the broker:
+Before it can be used, the BOSH Service Broker must be configured with a list of all service plans that it should be able to deploy. The following is an example of a configuration file for the broker:
 
 ```
 broker_id: 'bosh'
@@ -66,68 +66,68 @@ The following properties must be defined in a configuration file:
 
 | Property Name | Description |
 | --- | --- |
-| broker_id | Broker Id (Must be unique per Cloud Foundry deployment). This Id is passed to Cloud Foundry in response to `/v2/catalog` method. See [Service broker API](https://docs.cloudfoundry.org/services/api.html#catalog-mgmt) for details. |
-| bosh_targer | IP address or host mane of BOSH director |
-| bosh_user | Username that broker uses to login to BOSH |
-| bosh_password | Password that BOSH uses to login to BOSH |
-| serivce_user | User that is used for [service broker auth](https://docs.cloudfoundry.org/services/api.html#authentication) |
-| service_password | Password for service broker auth |
-| plans | List of all service plans, that broker should be able to deploy |
+| broker_id | The broker's ID (must be unique for each Cloud Foundry deployment). This ID is passed to Cloud Foundry in response to the `/v2/catalog` method. See [Service Broker API](https://docs.cloudfoundry.org/services/api.html#catalog-mgmt) for details. |
+| bosh_targer | An IP address or a host name of BOSH Director |
+| bosh_user | A username that the broker uses to login to BOSH |
+| bosh_password | A password that BOSH uses to login to BOSH |
+| serivce_user | A user that serves for [service broker auth](https://docs.cloudfoundry.org/services/api.html#authentication) |
+| service_password | A password for service broker auth |
+| plans | A list of all service plans that the broker should be able to deploy |
 
-#### Service Plan configuration
+#### Service plan configuration
 
-In configuration file, each service plan is defined as a separate property of a plans object. The name of this property is used as plan unique id. Each plan should contina the following properties.
+In the configuration file, each service plan is defined as a separate property of a plan's object. The name of this property is used as a plan-unique ID. Each plan should contain the following properties.
 
 | Property Name | Description |
 | --- | --- |
-| name | Name of the service plan |
-| description | Description of the service plan |
-| release | BOSH release url. This is actually a template, so things like {{.version}} can be used in this url |
-| stemcell | BOSH stemcell. This is also a template |
-| manifest_template | Manifest template file. This file should be located in a templates folder |
+| name | The name of the service plan |
+| description | A description of the service plan |
+| release | BOSH release URL. This is actually a template, so things, like {{.version}}, can be used in this URL. |
+| stemcell | BOSH stemcell. This is also a template. |
+| manifest_template | The manifest template file. This file should be located in the templates folder. |
 | bind_template | Bind script template |
 | unbind_template | Unbind script template |
-| params | Collection of all paramters, that can be passed to broker at provision time |
+| params | A collection of all paramters that can be passed to the broker at provisioning time. |
 
 #### Parameter configuration
 
-Each parameter, that can be passed to service broker at provision time, should be added to params collection. The following properties can be specified for each parameter.
+Each parameter that can be passed to the service broker at provisioning time should be added to a params collection. The following properties can be specified for each parameter.
 
 | Property Name | Description |
 | --- | --- |
-| name | Parameter name. The same name should be used when parameter is specifed in `cf create-service` command. Also, with the same name this parameter will be exposed to all templates |
-| default | Default value for a parameter. |
-| random | Specifies, whether broker should generate random string for a parameter value, in case when this value is not specified by the user. |
+| name | Parameter name. The same name should be used when a parameter is specifed in the `cf create-service` command. The parameter will be referenced by this name when being exposed to all templates. |
+| default | A default value for a parameter. |
+| random | Specifies whether the broker should generate a random string for a parameter value, in case this value is not specified by the user. |
 
-### Installing service broker
+### Installing the service broker
 
-The following steps should be made in order to deploy bosh service broker.
+The following are the steps for deploying the BOSH Service Broker.
 
-1. Clone service broker repository
+1. Clone the service broker repository:
   ```
   git clone https://github.com/s-matyukevich/bosh-broker
   cd bosh_broker
   ```
 
-1. Modify `config.yml` file and add all necessary templates to `templates` folder.
+1. Modify the `config.yml` file and add all the necessary templates to the `templates` folder.
 
-1. Push service broker to cloud foundry as an application (For now this is the only avaliable option. Later sepparate BOSH release will be provided to deploy this broker to BOSH directly.)
+1. Push the service broker to Cloud Foundry as an application.u (For now, this is the only avaliable option. Later, a separate BOSH release will be provided to deploy this broker to BOSH directly.)
   ```
   cf push bosh-broker -b https://github.com/cloudfoundry/go-buildpack
   ```
 
-1. Add service broker to Cloud Foundry
+1. Add the service broker to Cloud Foundry:
   ```
   cf create-service-broker bosh <user> <password> <broker-url>
   cf enable-service-access bosh
   ```
 
-1. Create service instance
+1. Create a service instance:
   ```
   cf create-service  bosh <plan-name> <instance-name> -c <plan-parameters>
   ```
 
-1. Bind service to an application
+1. Bind the service to an application:
   ```
   cf bind-service <app-name> <instance-name>
   ```
