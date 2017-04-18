@@ -1,0 +1,10 @@
+#!/bin/bash -e
+
+{{if gt .master_nodes 1}}
+host=$(bosh -u '{{.bosh_user}}' -p '{{.bosh_password}}'  -d  {{.deployment_name}} vms | grep 'proxy' | awk '{print $11}')
+{{else}}
+host=$(bosh -u '{{.bosh_user}}' -p '{{.bosh_password}}'  -d  {{.deployment_name}} vms | grep 'mysql' | awk '{print $11}')
+{{end}}
+
+echo "{\"hostname\": \"$host\", \"username\": \"root\", \"password\": \"{{.admin_password}}\", \"port\": 3306 }"
+exit 0

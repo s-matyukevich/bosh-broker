@@ -19,4 +19,3 @@ plans:
         default: 0
       - name: 'password'
         random: true
-

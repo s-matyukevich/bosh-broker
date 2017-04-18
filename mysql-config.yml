@@ -1,0 +1,31 @@
+broker_id: 'bosh'
+bosh_target: '52.52.19.198'
+bosh_user: 'admin'
+bosh_password: 'admin'
+service_user: 'user'
+service_password: 'password'
+plans:
+  mysql:
+    name:  mysql
+    description: "mysql database"
+    release: 'https://bosh.io/d/github.com/cloudfoundry/cf-mysql-release?v={{.version}}'
+    stemcell: "https://bosh.io/d/stemcells/bosh-vsphere-esxi-ubuntu-trusty-go_agent"
+    manifest_template: 'mysql.yml.tmpl'
+    bind_template: 'mysql-bind.sh.tmpl'
+    params:
+      - name: 'version'
+        default: '34'
+      - name: 'master_nodes'
+        default: 1
+      - name: 'admin_password'
+        random: true
+      - name: 'cluster_health_password'
+        random: true
+      - name: 'healthcheck_password'
+        random: true
+      - name: 'healthcheck_endpoint_password'
+        random: true
+      - name: 'admin_ro_password'
+        random: true
+      - name: 'proxy_api_password'
+        random: true

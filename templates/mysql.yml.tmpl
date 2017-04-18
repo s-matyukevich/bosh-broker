@@ -1,0 +1,58 @@
+director_uuid: {{.director_uuid}}
+name: {{.deployment_name}}
+
+releases:
+- name: redis
+  version: {{.version}}
+
+stemcells:
+- alias: trusty
+  os: ubuntu-trusty
+  version: latest
+
+instance_groups:
+- name: mysql
+  instances: {{.master_nodes}}
+  azs: [az1]
+  networks: 
+  - name: pcf-services
+  vm_type: medium
+  stemcell: default
+  persistent_disk_type: medium
+  jobs:
+  - {release: cf-mysql, name: mysql}
+
+{{if gt .master_nodes 1}}
+- name: proxy
+  instances: 1
+  azs: [az1]
+  networks: 
+  - name: pcf-services
+  vm_type: medium
+  stemcell: default
+  jobs:
+  - {release: cf-mysql, name: proxy}
+{{end}}
+properties:
+  cf_mysql:
+    mysql:
+    admin_password: {{.admin_password}}
+      cluster_health:
+        password: {{.cluster_health_password}}
+      galera_healthcheck:
+        db_password: {{.healthcheck_password}}
+        endpoint_password: {{.healthcheck_endpoint_password}}
+        endpoint_username: galera-healthcheck
+      roadmin_password: {{.admin_ro_password}}
+    proxy:
+      api_force_https: false
+      api_password: {{.proxy_api_password}}
+      api_username: proxy
+
+update:
+  canaries: 1
+  max_in_flight: 1
+  serial: false
+  canary_watch_time: 1000-60000
+  update_watch_time: 1000-60000
+
